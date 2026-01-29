@@ -3,15 +3,10 @@
   "version": "1.0.0",
   "description": "Cinematic Lifestyle Content Planner with Supabase Backend",
   "scripts": {
-    "dev": "npx serve .",
-    "build": "echo 'Static site - no build needed'",
-    "install-deps": "npm install"
+    "build": "echo 'No build required'"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.39.0"
-  },
-  "devDependencies": {
-    "serve": "^14.2.1"
   },
   "keywords": [
     "content-planner",
