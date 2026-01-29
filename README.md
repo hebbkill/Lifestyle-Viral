@@ -1,8 +1,12 @@
 # 🎬 Lifestyle Viral Planner
 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/hebbkill/Lifestyle-Viral)
+
 **Plataforma completa para planejamento e criação de conteúdo viral cinematográfico com banco de dados na nuvem.**
 
 > 🚀 **Novidade**: Agora com integração Supabase! Seus dados sincronizam automaticamente entre dispositivos.
+> 
+> 📦 **Deploy Rápido**: Siga o guia [`VERCEL_DEPLOY.md`](./VERCEL_DEPLOY.md) para colocar no ar em 5 minutos!
 
 ## 🚀 Funcionalidades
 
@@ -58,6 +62,7 @@ App - Lifestyle Viral/
 ├── package.json        # Dependências do projeto
 ├── netlify.toml        # Configuração Netlify
 ├── vercel.json         # Configuração Vercel
+├── VERCEL_DEPLOY.md    # 🚀 Guia rápido deploy Vercel (5 min)
 ├── DEPLOYMENT.md       # Guia de deploy completo
 └── README.md           # Este arquivo
 ```
@@ -71,7 +76,9 @@ App - Lifestyle Viral/
 
 ### Opção 2: Deploy com Supabase (Recomendado)
 
-**Siga o guia completo em [`DEPLOYMENT.md`](./DEPLOYMENT.md)**
+**🚀 Deploy Rápido na Vercel**: [`VERCEL_DEPLOY.md`](./VERCEL_DEPLOY.md) - **5 minutos!**
+
+**📖 Guia Completo (Netlify ou Vercel)**: [`DEPLOYMENT.md`](./DEPLOYMENT.md)
 
 Resumo rápido:
 1. Crie conta gratuita no [Supabase](https://supabase.com)
@@ -79,9 +86,9 @@ Resumo rápido:
 3. Execute o `schema.sql` no SQL Editor
 4. Copie suas credenciais (URL + anon key)
 5. Atualize `config.js` com suas credenciais
-6. Deploy no [Netlify](https://netlify.com) ou [Vercel](https://vercel.com)
+6. Deploy no [Vercel](https://vercel.com) (mais rápido) ou [Netlify](https://netlify.com)
 
-**Tempo estimado**: 15-20 minutos
+**Tempo estimado**: 5-20 minutos (dependendo da plataforma)
 
 ## 📖 Como Usar
 
