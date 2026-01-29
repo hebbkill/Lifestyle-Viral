@@ -1,0 +1,24 @@
+{
+  "name": "lifestyle-viral-planner",
+  "version": "1.0.0",
+  "description": "Cinematic Lifestyle Content Planner with Supabase Backend",
+  "scripts": {
+    "dev": "npx serve .",
+    "build": "echo 'Static site - no build needed'",
+    "install-deps": "npm install"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  },
+  "devDependencies": {
+    "serve": "^14.2.1"
+  },
+  "keywords": [
+    "content-planner",
+    "viral-content",
+    "lifestyle",
+    "supabase"
+  ],
+  "author": "",
+  "license": "MIT"
+}

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Help Button</title>
+    <style>
+        .hidden { display: none !important; }
+        #help-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            color: black;
+        }
+    </style>
+</head>
+<body style="background: #0a0a0a; color: white; padding: 40px;">
+    <h1>Teste do Botão Ajuda</h1>
+    
+    <button id="help-btn" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">
+        ? AJUDA
+    </button>
+
+    <div id="help-modal" class="hidden">
+        <div class="modal-content">
+            <h2>Modal de Ajuda Funcionando!</h2>
+            <p>Se você está vendo isso, o modal abriu corretamente.</p>
+            <button id="close-help" style="padding: 10px 20px; margin-top: 20px;">Fechar</button>
+        </div>
+    </div>
+
+    <div style="margin-top: 40px; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 8px;">
+        <h3>Console de Debug:</h3>
+        <div id="debug-log" style="font-family: monospace; font-size: 12px;"></div>
+    </div>
+
+    <script>
+        const debugLog = document.getElementById('debug-log');
+        
+        function log(message) {
+            console.log(message);
+            debugLog.innerHTML += `<div>${new Date().toLocaleTimeString()}: ${message}</div>`;
+        }
+
+        log('Script carregado');
+
+        const helpBtn = document.getElementById('help-btn');
+        const helpModal = document.getElementById('help-modal');
+        const closeBtn = document.getElementById('close-help');
+
+        log(`helpBtn encontrado: ${!!helpBtn}`);
+        log(`helpModal encontrado: ${!!helpModal}`);
+        log(`closeBtn encontrado: ${!!closeBtn}`);
+
+        function openHelpModal() {
+            log('openHelpModal() chamada');
+            if (helpModal) {
+                helpModal.classList.remove('hidden');
+                log('Classe "hidden" removida do modal');
+                log(`Modal classList: ${Array.from(helpModal.classList).join(', ')}`);
+                log(`Modal display: ${window.getComputedStyle(helpModal).display}`);
+            } else {
+                log('ERRO: helpModal não encontrado!');
+            }
+        }
+
+        function closeHelpModal() {
+            log('closeHelpModal() chamada');
+            if (helpModal) {
+                helpModal.classList.add('hidden');
+                log('Classe "hidden" adicionada ao modal');
+            }
+        }
+
+        if (helpBtn) {
+            helpBtn.addEventListener('click', () => {
+                log('Botão AJUDA clicado!');
+                openHelpModal();
+            });
+            log('Event listener anexado ao botão');
+        } else {
+            log('ERRO: Botão não encontrado!');
+        }
+
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                log('Botão FECHAR clicado!');
+                closeHelpModal();
+            });
+        }
+
+        log('Inicialização completa');
+    </script>
+</body>
+</html>
