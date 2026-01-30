@@ -643,10 +643,17 @@ function createKanbanCard(video) {
             if (targetColumn) {
                 const newStatus = targetColumn.dataset.status;
                 if (newStatus && video.status !== newStatus) {
+                    // Update video status
+                    video.status = newStatus;
+
+                    // Save to database
                     await window.dataSdk.update({
                         ...video,
                         status: newStatus
                     });
+
+                    // Force immediate visual update
+                    renderKanban();
                 }
             }
 
@@ -759,10 +766,17 @@ async function handleDrop(e, newStatus) {
     );
 
     if (video && video.status !== newStatus) {
+        // Update video status locally
+        video.status = newStatus;
+
+        // Save to database
         await window.dataSdk.update({
             ...video,
             status: newStatus
         });
+
+        // Force immediate visual update
+        renderKanban();
     }
 }
 
