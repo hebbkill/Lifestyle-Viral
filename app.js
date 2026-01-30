@@ -514,6 +514,10 @@ function renderKanban() {
         column.appendChild(body);
         container.appendChild(column);
     });
+
+    // Create Page Indicators
+    createPageIndicators(statuses.length);
+    updatePageIndicators();
 }
 
 function createKanbanCard(video) {
@@ -613,6 +617,70 @@ function createKanbanCard(video) {
         ` : ''}
     `;
     return card;
+}
+
+// ========================================
+// PAGE INDICATORS (Trello-Style Mobile Navigation)
+// ========================================
+
+function createPageIndicators(count) {
+    const indicatorsContainer = document.getElementById('page-indicators');
+    if (!indicatorsContainer) return;
+
+    indicatorsContainer.innerHTML = '';
+
+    for (let i = 0; i < count; i++) {
+        const indicator = document.createElement('div');
+        indicator.className = 'page-indicator';
+        indicator.dataset.index = i;
+
+        // Click to navigate to column
+        indicator.addEventListener('click', () => {
+            const container = dom.kanbanContainer;
+            const columnWidth = container.offsetWidth;
+            container.scrollTo({
+                left: columnWidth * i,
+                behavior: 'smooth'
+            });
+        });
+
+        indicatorsContainer.appendChild(indicator);
+    }
+}
+
+function updatePageIndicators() {
+    const container = dom.kanbanContainer;
+    const indicators = document.querySelectorAll('.page-indicator');
+
+    if (!container || indicators.length === 0) return;
+
+    // Remove existing scroll listener if any
+    container.removeEventListener('scroll', handleKanbanScroll);
+
+    // Add scroll listener
+    container.addEventListener('scroll', handleKanbanScroll);
+
+    // Initial update
+    handleKanbanScroll();
+}
+
+function handleKanbanScroll() {
+    const container = dom.kanbanContainer;
+    const indicators = document.querySelectorAll('.page-indicator');
+
+    if (!container || indicators.length === 0) return;
+
+    const scrollLeft = container.scrollLeft;
+    const columnWidth = container.offsetWidth;
+    const currentIndex = Math.round(scrollLeft / columnWidth);
+
+    indicators.forEach((indicator, index) => {
+        if (index === currentIndex) {
+            indicator.classList.add('active');
+        } else {
+            indicator.classList.remove('active');
+        }
+    });
 }
 
 async function handleDrop(e, newStatus) {
