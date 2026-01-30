@@ -440,30 +440,72 @@ button#view-kanban-btn:not(.active):hover {
     padding: 0.75rem !important;
   }
 
+  /* Progress Bar Section */
+  .glass-effect.p-4.mt-4 {
+    padding: 1rem !important;
+  }
+
+  .glass-effect.p-4.mt-4 .flex.items-center.justify-between {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.75rem !important;
+  }
+
+  .glass-effect.p-4.mt-4 .flex.items-center.gap-3 {
+    width: 100% !important;
+    justify-content: space-between !important;
+  }
+
+  #weekly-goal-input {
+    width: 70px !important;
+  }
+
   /* Filter Toolbar */
+  .glass-effect.p-4.mb-6 {
+    padding: 1rem !important;
+  }
+
   .grid-cols-12 {
     grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
   }
 
   .grid-cols-12>* {
     grid-column: span 12 !important;
   }
 
-  /* Kanban Container - Trello Style */
+  /* Clear Filters Button */
+  #clear-filters {
+    width: 100% !important;
+    margin-top: 0.5rem !important;
+  }
+
+  /* View Toggle Buttons */
+  .flex.justify-end.mb-4 {
+    justify-content: stretch !important;
+  }
+
+  #view-grid-btn,
+  #view-kanban-btn {
+    flex: 1 !important;
+    text-align: center !important;
+  }
+
+  /* Kanban Container - Full Width Columns */
   #kanban-container {
-    height: calc(100vh - 400px);
-    gap: 0;
+    height: auto;
+    min-height: calc(100vh - 400px);
+    gap: 1rem;
     padding: 0;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
+    flex-direction: column;
+    overflow-x: visible;
+    overflow-y: auto;
   }
 
   .kanban-column {
-    min-width: 100vw;
-    width: 100vw;
-    scroll-snap-align: start;
-    padding: 0 1rem;
+    min-width: 100%;
+    width: 100%;
+    padding: 0;
     box-sizing: border-box;
   }
 
@@ -555,9 +597,33 @@ button#view-kanban-btn:not(.active):hover {
     padding: 0.75rem !important;
   }
 
+  .glass-effect.p-4.mt-4 .flex.items-center.justify-between {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.75rem !important;
+  }
+
+  .glass-effect.p-4.mt-4 .flex.items-center.gap-3 {
+    width: 100% !important;
+    flex-wrap: wrap !important;
+  }
+
+  .glass-effect.p-4.mt-4 .flex.items-center.gap-3 span {
+    font-size: 0.75rem !important;
+  }
+
   #weekly-goal-input {
     width: 60px !important;
     padding: 0.5rem !important;
+    font-size: 0.875rem !important;
+  }
+
+  #progress-text {
+    font-size: 0.7rem !important;
+  }
+
+  #progress-status {
+    font-size: 1.25rem !important;
   }
 
   /* Main Content Padding */
@@ -583,17 +649,26 @@ button#view-kanban-btn:not(.active):hover {
     font-size: 0.65rem !important;
   }
 
-  /* Kanban Board */
+  /* Clear Filters Button */
+  #clear-filters {
+    width: 100% !important;
+    padding: 0.625rem !important;
+    font-size: 0.7rem !important;
+  }
+
+  /* Kanban Board - Full Width */
   #kanban-container {
-    height: calc(100vh - 450px);
-    padding-left: 0.25rem;
-    padding-right: 0.25rem;
-    gap: 0.75rem;
+    height: auto;
+    min-height: calc(100vh - 450px);
+    padding: 0;
+    gap: 1rem;
+    flex-direction: column;
   }
 
   .kanban-column {
-    min-width: 260px;
-    width: 260px;
+    min-width: 100%;
+    width: 100%;
+    padding: 0;
   }
 
   .kanban-header {
@@ -634,6 +709,7 @@ button#view-kanban-btn:not(.active):hover {
   /* Form Fields */
   .grid.grid-cols-2 {
     grid-template-columns: 1fr !important;
+    gap: 1rem !important;
   }
 
   label {
@@ -648,14 +724,32 @@ button#view-kanban-btn:not(.active):hover {
 
   /* Voice Input Wrapper */
   .voice-input-wrapper {
-    flex-direction: column;
-    align-items: stretch !important;
+    flex-direction: row !important;
+    align-items: flex-start !important;
   }
 
   .voice-btn {
-    margin-top: 0.5rem !important;
-    width: 100%;
-    height: 44px;
+    margin-top: 28px !important;
+    width: 44px !important;
+    height: 44px !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Modal Form Sections */
+  .border-l-2.pl-4 {
+    padding-left: 0.75rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  /* GPT Prompt Generator */
+  #generate-prompt-btn,
+  #copy-open-chatgpt-btn {
+    width: 100% !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .flex.flex-wrap.gap-2.mb-3 {
+    flex-direction: column !important;
   }
 
   /* Buttons */
@@ -663,6 +757,11 @@ button#view-kanban-btn:not(.active):hover {
   #delete-btn {
     padding: 0.875rem !important;
     font-size: 0.875rem !important;
+  }
+
+  .flex.gap-3.mt-8 {
+    flex-direction: column !important;
+    gap: 0.75rem !important;
   }
 
   /* Help Modal - Full Screen */
@@ -762,7 +861,8 @@ button#view-kanban-btn:not(.active):hover {
 
 @media (max-width: 768px) {
   .page-indicators {
-    display: flex;
+    display: none;
+    /* Hidden since we're using full-width columns now */
   }
 }
 
