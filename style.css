@@ -407,13 +407,29 @@ button#view-kanban-btn:not(.active):hover {
 }
 
 /* ========================================
-   MOBILE RESPONSIVENESS
+   MOBILE RESPONSIVENESS - COMPLETE OVERHAUL
    ======================================== */
 
 /* Tablet and Small Desktop (max-width: 768px) */
 @media (max-width: 768px) {
 
+  /* Force body and main to proper sizing */
+  body {
+    overflow-x: hidden !important;
+    width: 100vw !important;
+  }
+
+  main {
+    padding: 1rem !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
   /* Header Optimizations */
+  header {
+    padding: 0 !important;
+  }
+
   header .px-6 {
     padding-left: 1rem !important;
     padding-right: 1rem !important;
@@ -436,16 +452,20 @@ button#view-kanban-btn:not(.active):hover {
   }
 
   /* Stats Cards */
-  .glass-effect.p-4 {
+  header .glass-effect.p-4 {
     padding: 0.75rem !important;
   }
 
-  /* Progress Bar Section */
+  header .glass-effect .text-3xl {
+    font-size: 1.75rem !important;
+  }
+
+  /* Progress Bar Section - FIXED */
   .glass-effect.p-4.mt-4 {
     padding: 1rem !important;
   }
 
-  .glass-effect.p-4.mt-4 .flex.items-center.justify-between {
+  .glass-effect.p-4.mt-4>.flex.items-center.justify-between {
     flex-direction: column !important;
     align-items: flex-start !important;
     gap: 0.75rem !important;
@@ -460,83 +480,111 @@ button#view-kanban-btn:not(.active):hover {
     width: 70px !important;
   }
 
-  /* Filter Toolbar */
+  /* Filter Toolbar - FIXED */
   .glass-effect.p-4.mb-6 {
     padding: 1rem !important;
   }
 
   .grid-cols-12 {
-    grid-template-columns: 1fr !important;
+    display: flex !important;
+    flex-direction: column !important;
     gap: 0.75rem !important;
   }
 
   .grid-cols-12>* {
-    grid-column: span 12 !important;
+    width: 100% !important;
+    grid-column: unset !important;
+  }
+
+  /* Search Input */
+  #search-input {
+    width: 100% !important;
+  }
+
+  /* Filter Selects */
+  #filter-status,
+  #filter-hook,
+  #filter-visual,
+  #filter-music-vibe {
+    width: 100% !important;
   }
 
   /* Clear Filters Button */
   #clear-filters {
     width: 100% !important;
     margin-top: 0.5rem !important;
+    display: block !important;
   }
 
-  /* View Toggle Buttons */
+  /* View Toggle Container - COMPLETELY FIXED */
   .flex.justify-end.mb-4 {
+    display: flex !important;
     justify-content: stretch !important;
+    width: 100% !important;
+    gap: 0.5rem !important;
   }
 
+  /* View Toggle Buttons - FORCED STYLING */
   #view-grid-btn,
   #view-kanban-btn {
-    flex: 1 !important;
+    flex: 1 1 50% !important;
+    width: 50% !important;
+    max-width: 50% !important;
     text-align: center !important;
+    padding: 0.75rem 1rem !important;
+    font-size: 0.75rem !important;
+    white-space: nowrap !important;
   }
 
   /* Kanban Container - Full Width Columns */
   #kanban-container {
-    height: auto;
-    min-height: calc(100vh - 400px);
-    gap: 1rem;
-    padding: 0;
-    flex-direction: column;
-    overflow-x: visible;
-    overflow-y: auto;
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: calc(100vh - 400px) !important;
+    gap: 1rem !important;
+    padding: 0 !important;
+    overflow-x: visible !important;
+    overflow-y: auto !important;
   }
 
   .kanban-column {
-    min-width: 100%;
-    width: 100%;
-    padding: 0;
-    box-sizing: border-box;
+    min-width: 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    flex-shrink: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
   }
 
   .kanban-header {
-    padding: 1rem;
-    font-size: 0.875rem;
-    font-weight: 700;
+    padding: 1rem !important;
+    font-size: 0.875rem !important;
+    font-weight: 700 !important;
   }
 
   .kanban-body {
-    padding: 1rem;
-    gap: 1rem;
+    padding: 1rem !important;
+    gap: 1rem !important;
   }
 
   .kanban-card {
-    margin-bottom: 1rem;
+    margin-bottom: 0 !important;
   }
 
   /* Content Grid */
   .content-grid {
     grid-template-columns: 1fr !important;
-    gap: 1rem;
+    gap: 1rem !important;
   }
 
   /* Modal */
   .modal-content {
     max-width: 95% !important;
-    margin: 1rem;
+    margin: 1rem !important;
   }
 
-  /* Help Modal */
+  /* Help Modal Sidebar */
   #help-modal .w-64 {
     width: 200px !important;
   }
@@ -545,16 +593,45 @@ button#view-kanban-btn:not(.active):hover {
 /* Mobile Phones (max-width: 480px) */
 @media (max-width: 480px) {
 
-  /* Header */
+  /* Force proper mobile sizing */
+  * {
+    box-sizing: border-box !important;
+  }
+
+  body {
+    overflow-x: hidden !important;
+    width: 100vw !important;
+  }
+
+  main {
+    padding: 0.75rem !important;
+    width: 100% !important;
+  }
+
+  /* Header - Complete Reconfiguration */
+  header {
+    padding: 0 !important;
+  }
+
+  header .px-6 {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+
+  header .py-6 {
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+  }
+
   header .flex.items-center.justify-between {
-    flex-direction: column;
+    flex-direction: column !important;
     align-items: flex-start !important;
-    gap: 1rem;
+    gap: 1rem !important;
   }
 
   header .flex.items-center.gap-3 {
-    width: 100%;
-    flex-direction: column;
+    width: 100% !important;
+    flex-direction: column !important;
     gap: 0.5rem !important;
   }
 
@@ -562,7 +639,8 @@ button#view-kanban-btn:not(.active):hover {
   #help-btn,
   #new-video-btn {
     width: 100% !important;
-    text-align: center;
+    text-align: center !important;
+    padding: 0.75rem !important;
   }
 
   /* Title */
@@ -575,12 +653,13 @@ button#view-kanban-btn:not(.active):hover {
     font-size: 0.7rem !important;
   }
 
-  /* Stats Grid - Keep 2x2 */
+  /* Stats Grid - 2x2 */
   header .grid-cols-4 {
+    grid-template-columns: repeat(2, 1fr) !important;
     gap: 0.5rem !important;
   }
 
-  .glass-effect.p-4 {
+  header .glass-effect.p-4 {
     padding: 0.5rem !important;
   }
 
@@ -592,20 +671,22 @@ button#view-kanban-btn:not(.active):hover {
     font-size: 0.65rem !important;
   }
 
-  /* Progress Bar Section */
+  /* Progress Bar Section - COMPLETELY FIXED */
   .glass-effect.p-4.mt-4 {
     padding: 0.75rem !important;
   }
 
-  .glass-effect.p-4.mt-4 .flex.items-center.justify-between {
+  .glass-effect.p-4.mt-4>.flex.items-center.justify-between {
     flex-direction: column !important;
     align-items: flex-start !important;
     gap: 0.75rem !important;
+    width: 100% !important;
   }
 
   .glass-effect.p-4.mt-4 .flex.items-center.gap-3 {
     width: 100% !important;
     flex-wrap: wrap !important;
+    justify-content: space-between !important;
   }
 
   .glass-effect.p-4.mt-4 .flex.items-center.gap-3 span {
@@ -626,27 +707,26 @@ button#view-kanban-btn:not(.active):hover {
     font-size: 1.25rem !important;
   }
 
-  /* Main Content Padding */
-  main {
+  /* Filter Toolbar - COMPLETELY FIXED */
+  .glass-effect.p-4.mb-6 {
     padding: 0.75rem !important;
   }
 
-  /* Filter Toolbar */
-  .glass-effect.p-4.mb-6 {
-    padding: 0.75rem !important;
+  .grid-cols-12 {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+  }
+
+  .grid-cols-12>* {
+    width: 100% !important;
   }
 
   input[type="text"],
   select {
     font-size: 0.875rem !important;
     padding: 0.625rem !important;
-  }
-
-  /* View Toggle Buttons */
-  #view-grid-btn,
-  #view-kanban-btn {
-    padding: 0.5rem 0.75rem !important;
-    font-size: 0.65rem !important;
+    width: 100% !important;
   }
 
   /* Clear Filters Button */
@@ -654,35 +734,65 @@ button#view-kanban-btn:not(.active):hover {
     width: 100% !important;
     padding: 0.625rem !important;
     font-size: 0.7rem !important;
+    margin-top: 0.5rem !important;
   }
 
-  /* Kanban Board - Full Width */
+  /* View Toggle - AGGRESSIVELY FIXED */
+  .flex.justify-end.mb-4 {
+    display: flex !important;
+    justify-content: stretch !important;
+    width: 100% !important;
+    gap: 0.5rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  #view-grid-btn,
+  #view-kanban-btn {
+    flex: 1 1 50% !important;
+    width: 50% !important;
+    max-width: 50% !important;
+    min-width: 0 !important;
+    text-align: center !important;
+    padding: 0.625rem 0.5rem !important;
+    font-size: 0.65rem !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* Kanban Board - COMPLETELY VERTICAL */
   #kanban-container {
-    height: auto;
-    min-height: calc(100vh - 450px);
-    padding: 0;
-    gap: 1rem;
-    flex-direction: column;
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: calc(100vh - 450px) !important;
+    padding: 0 !important;
+    gap: 1rem !important;
+    overflow-x: visible !important;
+    overflow-y: auto !important;
   }
 
   .kanban-column {
-    min-width: 100%;
-    width: 100%;
-    padding: 0;
+    min-width: 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    flex-shrink: 0 !important;
+    padding: 0 !important;
   }
 
   .kanban-header {
-    padding: 0.75rem;
-    font-size: 0.7rem;
+    padding: 0.75rem !important;
+    font-size: 0.7rem !important;
   }
 
   .kanban-body {
-    padding: 0.75rem;
-    gap: 0.75rem;
+    padding: 0.75rem !important;
+    gap: 0.75rem !important;
   }
 
   .kanban-card {
     padding: 0.75rem !important;
+    margin-bottom: 0 !important;
   }
 
   .kanban-card h4 {
@@ -693,13 +803,13 @@ button#view-kanban-btn:not(.active):hover {
     font-size: 0.7rem !important;
   }
 
-  /* Modal - Full Screen on Mobile */
+  /* Modal - Full Screen */
   .modal-content {
     max-width: 100% !important;
     max-height: 100vh !important;
     margin: 0 !important;
     border-radius: 0 !important;
-    height: 100vh;
+    height: 100vh !important;
   }
 
   #modal-title {
@@ -720,12 +830,19 @@ button#view-kanban-btn:not(.active):hover {
   textarea,
   select {
     font-size: 0.875rem !important;
+    width: 100% !important;
   }
 
   /* Voice Input Wrapper */
   .voice-input-wrapper {
+    display: flex !important;
     flex-direction: row !important;
     align-items: flex-start !important;
+    gap: 0.5rem !important;
+  }
+
+  .voice-input-wrapper>div {
+    flex: 1 !important;
   }
 
   .voice-btn {
@@ -749,17 +866,21 @@ button#view-kanban-btn:not(.active):hover {
   }
 
   .flex.flex-wrap.gap-2.mb-3 {
+    display: flex !important;
     flex-direction: column !important;
+    gap: 0.5rem !important;
   }
 
-  /* Buttons */
+  /* Save/Delete Buttons */
   #save-btn,
   #delete-btn {
     padding: 0.875rem !important;
     font-size: 0.875rem !important;
+    width: 100% !important;
   }
 
   .flex.gap-3.mt-8 {
+    display: flex !important;
     flex-direction: column !important;
     gap: 0.75rem !important;
   }
@@ -776,7 +897,7 @@ button#view-kanban-btn:not(.active):hover {
   }
 
   #help-modal .flex-1 {
-    width: 100%;
+    width: 100% !important;
   }
 
   /* Week Separator */
@@ -804,35 +925,35 @@ button#view-kanban-btn:not(.active):hover {
   input,
   select,
   textarea {
-    min-height: 44px;
+    min-height: 44px !important;
   }
 
   /* Remove hover effects on touch devices */
   .card-hover:hover {
-    transform: none;
+    transform: none !important;
   }
 
   .kanban-card:hover {
-    transform: none;
+    transform: none !important;
   }
 
   /* Better tap feedback */
   button:active,
   .kanban-card:active {
-    opacity: 0.7;
+    opacity: 0.7 !important;
   }
 
   /* Disable hover tooltips on touch */
   .voice-btn[title]:hover::after,
   .voice-btn[title]:hover::before {
-    display: none;
+    display: none !important;
   }
 }
 
 /* Landscape Mobile Optimization */
 @media (max-width: 768px) and (orientation: landscape) {
   #kanban-container {
-    height: calc(100vh - 200px);
+    height: calc(100vh - 200px) !important;
   }
 
   header .grid-cols-4 {
@@ -845,25 +966,7 @@ button#view-kanban-btn:not(.active):hover {
    ======================================== */
 
 .page-indicators {
-  display: none;
-  position: fixed;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 100;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-@media (max-width: 768px) {
-  .page-indicators {
-    display: none;
-    /* Hidden since we're using full-width columns now */
-  }
+  display: none !important;
 }
 
 .page-indicator {
