@@ -181,8 +181,47 @@ async function init() {
     dom.filterWeek.addEventListener('change', (e) => {
         filters.thisWeekOnly = e.target.checked;
         applyFilters();
+        updateFilterCount();
     });
     dom.clearFiltersBtn.addEventListener('click', clearFilters);
+
+    // Filter Modal Functionality
+    const filtersBtn = document.getElementById('filters-btn');
+    const filtersModal = document.getElementById('filters-modal');
+    const closeFiltersBtn = document.getElementById('close-filters-btn');
+    const filtersBackdrop = document.querySelector('.filters-modal-backdrop');
+
+    if (filtersBtn) {
+        filtersBtn.addEventListener('click', () => {
+            filtersModal.classList.remove('hidden');
+        });
+    }
+
+    if (closeFiltersBtn) {
+        closeFiltersBtn.addEventListener('click', () => {
+            filtersModal.classList.add('hidden');
+        });
+    }
+
+    if (filtersBackdrop) {
+        filtersBackdrop.addEventListener('click', () => {
+            filtersModal.classList.add('hidden');
+        });
+    }
+
+    // Update filter count when filters change
+    dom.searchInput.addEventListener('input', updateFilterCount);
+    dom.filterStatus.addEventListener('change', updateFilterCount);
+    dom.filterHook.addEventListener('change', updateFilterCount);
+    dom.filterVisual.addEventListener('change', updateFilterCount);
+    const filterMusicVibe = document.getElementById('filter-music-vibe');
+    if (filterMusicVibe) {
+        filterMusicVibe.addEventListener('change', () => {
+            applyFilters();
+            updateFilterCount();
+        });
+    }
+
 
     // Form
     // dom.form.addEventListener('submit', handleSaveVideo); // Changed to button click
@@ -380,8 +419,29 @@ function clearFilters() {
     dom.filterHook.value = '';
     dom.filterVisual.value = '';
     dom.filterWeek.checked = false;
+    const filterMusicVibe = document.getElementById('filter-music-vibe');
+    if (filterMusicVibe) filterMusicVibe.value = '';
 
     applyFilters();
+    updateFilterCount();
+}
+
+function updateFilterCount() {
+    let count = 0;
+
+    if (dom.searchInput.value) count++;
+    if (dom.filterStatus.value) count++;
+    if (dom.filterHook.value) count++;
+    if (dom.filterVisual.value) count++;
+    const filterMusicVibe = document.getElementById('filter-music-vibe');
+    if (filterMusicVibe && filterMusicVibe.value) count++;
+    if (dom.filterWeek.checked) count++;
+
+    const badge = document.getElementById('active-filters-count');
+    if (badge) {
+        badge.textContent = count;
+        badge.style.display = count > 0 ? 'block' : 'none';
+    }
 }
 
 function setViewMode(mode) {

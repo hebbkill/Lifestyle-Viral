@@ -104,73 +104,100 @@
 
         <!-- Main Content -->
         <main class="flex-1 overflow-auto p-6">
-            <!-- Filter Toolbar -->
-            <div id="filter-toolbar" class="glass-effect p-4 mb-6">
-                <!-- Filter Controls -->
-                <div class="grid grid-cols-12 gap-4 mb-4 filter-grid">
-                    <input type="text" id="search-input" placeholder="Buscar por título, conceito..."
-                        class="col-span-12 md:col-span-4 px-4 py-2 bg-black border text-white font-mono-custom text-sm"
-                        style="border-color: rgba(255, 255, 255, 0.2);">
+            <!-- Filter Button -->
+            <div class="flex items-center gap-3 mb-6">
+                <button id="filters-btn" class="filter-toggle-btn">
+                    <span>⚙️ FILTROS</span>
+                    <span id="active-filters-count" class="filter-badge" style="display: none;">0</span>
+                </button>
+                <button id="clear-filters"
+                    class="px-4 py-2 text-xs font-bold font-mono-custom transition-opacity hover:opacity-70"
+                    style="background: rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.7); letter-spacing: 1px;">
+                    LIMPAR FILTROS
+                </button>
+            </div>
 
-                    <select id="filter-status"
-                        class="col-span-6 md:col-span-2 px-2 py-2 bg-black border text-white font-mono-custom text-xs"
-                        style="border-color: rgba(255, 255, 255, 0.2);">
-                        <option value="">Status: Todos</option>
-                        <option value="Ideia">Ideia</option>
-                        <option value="Roteirizando">Roteirizando</option>
-                        <option value="Takes Gravados">Takes Gravados</option>
-                        <option value="Editando">Editando</option>
-                        <option value="Agendado">Agendado</option>
-                        <option value="Publicado">Publicado</option>
-                    </select>
+            <!-- Filter Modal -->
+            <div id="filters-modal" class="filters-modal hidden">
+                <div class="filters-modal-backdrop"></div>
+                <div class="filters-modal-content glass-effect">
+                    <div class="filters-modal-header">
+                        <h3 class="text-xl font-bold font-mono-custom">⚙️ FILTROS</h3>
+                        <button id="close-filters-btn" class="close-modal-btn">✕</button>
+                    </div>
+                    <div class="filters-modal-body">
+                        <!-- Search Input -->
+                        <div class="filter-group">
+                            <label class="filter-label">BUSCAR</label>
+                            <input type="text" id="search-input" placeholder="Buscar por título, conceito..."
+                                class="filter-input">
+                        </div>
 
-                    <select id="filter-hook"
-                        class="col-span-6 md:col-span-2 px-2 py-2 bg-black border text-white font-mono-custom text-xs"
-                        style="border-color: rgba(255, 255, 255, 0.2);">
-                        <option value="">Gancho: Todos</option>
-                        <option value="Curiosidade">Curiosidade</option>
-                        <option value="Pattern Interrupt">Pattern Interrupt</option>
-                        <option value="Dor/Desejo">Dor/Desejo</option>
-                        <option value="Visual Impactante">Visual Impactante</option>
-                        <option value="Pergunta Direta">Pergunta Direta</option>
-                        <option value="Afirmação Polêmica">Afirmação Polêmica</option>
-                    </select>
+                        <!-- Status Filter -->
+                        <div class="filter-group">
+                            <label class="filter-label">STATUS</label>
+                            <select id="filter-status" class="filter-input">
+                                <option value="">Todos</option>
+                                <option value="Ideia">Ideia</option>
+                                <option value="Roteirizando">Roteirizando</option>
+                                <option value="Takes Gravados">Takes Gravados</option>
+                                <option value="Editando">Editando</option>
+                                <option value="Agendado">Agendado</option>
+                                <option value="Publicado">Publicado</option>
+                            </select>
+                        </div>
 
-                    <select id="filter-visual"
-                        class="col-span-6 md:col-span-2 px-2 py-2 bg-black border text-white font-mono-custom text-xs"
-                        style="border-color: rgba(255, 255, 255, 0.2);">
-                        <option value="">Estilo: Todos</option>
-                        <option value="Slow Living">Slow Living</option>
-                        <option value="Cinematic Travel">Cinematic Travel</option>
-                        <option value="Urbano Dinâmico">Urbano Dinâmico</option>
-                        <option value="Golden Hour">Golden Hour</option>
-                        <option value="Minimalista">Minimalista</option>
-                        <option value="Energético / Esportivo">Energético / Esportivo</option>
-                    </select>
-                    <select id="filter-music-vibe"
-                        class="col-span-6 md:col-span-2 px-2 py-2 bg-black border text-white font-mono-custom text-xs"
-                        style="border-color: rgba(255, 255, 255, 0.2);">
-                        <option value="">Música: Todos</option>
-                        <option value="Lo-fi / Calma">Lo-fi / Calma</option>
-                        <option value="Pop Inspirador">Pop Inspirador</option>
-                        <option value="Eletrônica Suave">Eletrônica Suave</option>
-                        <option value="Épica / Orquestral">Épica / Orquestral</option>
-                        <option value="Trend do Momento (Viral)">Trend do Momento (Viral)</option>
-                    </select>
-                </div>
-                <div class="flex gap-2">
-                    <label class="flex items-center gap-2 px-4 py-2 bg-black border cursor-pointer text-sm"
-                        style="border-color: rgba(255, 255, 255, 0.2); color: #ffffff;">
-                        <input type="checkbox" id="filter-week" class="w-4 h-4">
-                        <span id="filter-week-label" class="font-mono-custom">SO ESTA SEMANA</span>
-                    </label>
+                        <!-- Hook Filter -->
+                        <div class="filter-group">
+                            <label class="filter-label">GANCHO</label>
+                            <select id="filter-hook" class="filter-input">
+                                <option value="">Todos</option>
+                                <option value="Curiosidade">Curiosidade</option>
+                                <option value="Pattern Interrupt">Pattern Interrupt</option>
+                                <option value="Dor/Desejo">Dor/Desejo</option>
+                                <option value="Visual Impactante">Visual Impactante</option>
+                                <option value="Pergunta Direta">Pergunta Direta</option>
+                                <option value="Afirmação Polêmica">Afirmação Polêmica</option>
+                            </select>
+                        </div>
+
+                        <!-- Visual Style Filter -->
+                        <div class="filter-group">
+                            <label class="filter-label">ESTILO VISUAL</label>
+                            <select id="filter-visual" class="filter-input">
+                                <option value="">Todos</option>
+                                <option value="Slow Living">Slow Living</option>
+                                <option value="Cinematic Travel">Cinematic Travel</option>
+                                <option value="Urbano Dinâmico">Urbano Dinâmico</option>
+                                <option value="Golden Hour">Golden Hour</option>
+                                <option value="Minimalista">Minimalista</option>
+                                <option value="Energético / Esportivo">Energético / Esportivo</option>
+                            </select>
+                        </div>
+
+                        <!-- Music Vibe Filter -->
+                        <div class="filter-group">
+                            <label class="filter-label">MÚSICA</label>
+                            <select id="filter-music-vibe" class="filter-input">
+                                <option value="">Todos</option>
+                                <option value="Lo-fi / Calma">Lo-fi / Calma</option>
+                                <option value="Pop Inspirador">Pop Inspirador</option>
+                                <option value="Eletrônica Suave">Eletrônica Suave</option>
+                                <option value="Épica / Orquestral">Épica / Orquestral</option>
+                                <option value="Trend do Momento (Viral)">Trend do Momento (Viral)</option>
+                            </select>
+                        </div>
+
+                        <!-- Week Filter -->
+                        <div class="filter-group">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="filter-week" class="w-4 h-4">
+                                <span class="font-mono-custom text-sm">SÓ ESTA SEMANA</span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <button id="clear-filters"
-                class="px-4 py-2 text-xs font-bold font-mono-custom transition-opacity hover:opacity-70"
-                style="background: rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.7); letter-spacing: 1px;">
-                LIMPAR FILTROS
-            </button>
     </div>
 
     <!-- View Toggle -->
