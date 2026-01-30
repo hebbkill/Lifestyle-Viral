@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Limpar Cache - Lifestyle Viral</title>
+    <style>
+        body {
+            font-family: 'Space Mono', monospace;
+            background: #000;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .instructions {
+            max-width: 600px;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .step {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 3px solid #10b981;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 1rem 2rem;
+            background: #fff;
+            color: #000;
+            text-decoration: none;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        a:hover {
+            background: #e0e0e0;
+        }
+
+        .shortcut {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🔄 LIMPAR CACHE DO NAVEGADOR</h1>
+
+    <div class="instructions">
+        <div class="step">
+            <strong>OPÇÃO 1: Hard Refresh (Mais Rápido)</strong><br>
+            Pressione: <span class="shortcut">Ctrl + Shift + R</span><br>
+            ou: <span class="shortcut">Ctrl + F5</span>
+        </div>
+
+        <div class="step">
+            <strong>OPÇÃO 2: Limpar Cache Manualmente</strong><br>
+            1. Pressione <span class="shortcut">Ctrl + Shift + Delete</span><br>
+            2. Selecione "Imagens e arquivos em cache"<br>
+            3. Clique em "Limpar dados"
+        </div>
+
+        <div class="step">
+            <strong>OPÇÃO 3: Modo Anônimo</strong><br>
+            Pressione <span class="shortcut">Ctrl + Shift + N</span> (Chrome)<br>
+            ou <span class="shortcut">Ctrl + Shift + P</span> (Firefox)<br>
+            E abra o app nessa janela
+        </div>
+    </div>
+
+    <a href="./index.html?v=2" id="openApp">ABRIR APP (SEM CACHE)</a>
+
+    <script>
+        // Adiciona timestamp para forçar reload
+        document.getElementById('openApp').href = './index.html?v=' + Date.now();
+    </script>
+</body>
+
+</html>

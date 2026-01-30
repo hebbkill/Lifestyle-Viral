@@ -538,9 +538,66 @@ function createKanbanCard(video) {
         card.classList.remove('dragging');
     });
 
+    // Touch Events for Mobile Drag-and-Drop
+    let touchStartX, touchStartY, isDragging = false;
+
+    card.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+        isDragging = false;
+    }, { passive: true });
+
+    card.addEventListener('touchmove', (e) => {
+        if (!isDragging) {
+            const touchX = e.touches[0].clientX;
+            const touchY = e.touches[0].clientY;
+            const deltaX = Math.abs(touchX - touchStartX);
+            const deltaY = Math.abs(touchY - touchStartY);
+
+            // Start dragging if moved more than 10px
+            if (deltaX > 10 || deltaY > 10) {
+                isDragging = true;
+                card.classList.add('dragging');
+            }
+        }
+    }, { passive: true });
+
+    card.addEventListener('touchend', async (e) => {
+        if (isDragging) {
+            card.classList.remove('dragging');
+
+            // Get the element at touch position
+            const touch = e.changedTouches[0];
+            const elementAtPoint = document.elementFromPoint(touch.clientX, touch.clientY);
+
+            // Find the kanban column
+            let targetColumn = elementAtPoint;
+            while (targetColumn && !targetColumn.classList.contains('kanban-column')) {
+                targetColumn = targetColumn.parentElement;
+            }
+
+            if (targetColumn) {
+                const newStatus = targetColumn.dataset.status;
+                if (newStatus && video.status !== newStatus) {
+                    await window.dataSdk.update({
+                        ...video,
+                        status: newStatus
+                    });
+                }
+            }
+
+            isDragging = false;
+        } else {
+            // If not dragging, treat as a tap to open modal
+            openModal(video);
+        }
+    });
+
     card.onclick = (e) => {
-        // Prevent click when dragging end logic might fire
-        openModal(video);
+        // Only open modal if not from touch (touch is handled above)
+        if (!isDragging && e.type !== 'touchend') {
+            openModal(video);
+        }
     };
 
     card.innerHTML = `
