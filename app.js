@@ -18,7 +18,7 @@ let filters = {
     visualStyle: '',
     thisWeekOnly: false
 };
-let viewMode = 'grid'; // 'grid' | 'kanban'
+let viewMode = 'kanban'; // 'grid' | 'kanban'
 let editingVideo = null; // Track the video being edited
 
 
