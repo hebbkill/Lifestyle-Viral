@@ -88,8 +88,16 @@ async function init() {
     console.log('close-help element:', closeHelpBtn);
 
     if (newVideoBtn) {
-        newVideoBtn.addEventListener('click', () => openModal());
-        console.log('✓ Event listener attached to new-video-btn');
+        // Remove existing listeners (cloning node is a brute force way, but simple update is safer)
+        const newBtn = newVideoBtn.cloneNode(true);
+        newVideoBtn.parentNode.replaceChild(newBtn, newVideoBtn);
+
+        newBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            openModal();
+        });
+        console.log('✓ Event listener attached to new-video-btn (Protected)');
     } else {
         console.error('✗ new-video-btn not found!');
     }
@@ -102,8 +110,16 @@ async function init() {
     }
 
     if (helpBtn) {
-        helpBtn.addEventListener('click', openHelpModal);
-        console.log('✓ Event listener attached to help-btn');
+        // Isolate help button
+        const newHelpBtn = helpBtn.cloneNode(true);
+        helpBtn.parentNode.replaceChild(newHelpBtn, helpBtn);
+
+        newHelpBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            openHelpModal(); // This calls the robust version I made earlier
+        });
+        console.log('✓ Event listener attached to help-btn (Protected)');
     } else {
         console.error('✗ help-btn not found!');
     }
