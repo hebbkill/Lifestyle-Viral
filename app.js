@@ -18,7 +18,7 @@ let filters = {
     visualStyle: '',
     thisWeekOnly: false
 };
-let viewMode = 'kanban'; // 'grid' | 'kanban'
+let viewMode = 'grid'; // 'grid' | 'kanban'
 let editingVideo = null; // Track the video being edited
 
 
@@ -181,47 +181,8 @@ async function init() {
     dom.filterWeek.addEventListener('change', (e) => {
         filters.thisWeekOnly = e.target.checked;
         applyFilters();
-        updateFilterCount();
     });
     dom.clearFiltersBtn.addEventListener('click', clearFilters);
-
-    // Filter Modal Functionality
-    const filtersBtn = document.getElementById('filters-btn');
-    const filtersModal = document.getElementById('filters-modal');
-    const closeFiltersBtn = document.getElementById('close-filters-btn');
-    const filtersBackdrop = document.querySelector('.filters-modal-backdrop');
-
-    if (filtersBtn) {
-        filtersBtn.addEventListener('click', () => {
-            filtersModal.classList.remove('hidden');
-        });
-    }
-
-    if (closeFiltersBtn) {
-        closeFiltersBtn.addEventListener('click', () => {
-            filtersModal.classList.add('hidden');
-        });
-    }
-
-    if (filtersBackdrop) {
-        filtersBackdrop.addEventListener('click', () => {
-            filtersModal.classList.add('hidden');
-        });
-    }
-
-    // Update filter count when filters change
-    dom.searchInput.addEventListener('input', updateFilterCount);
-    dom.filterStatus.addEventListener('change', updateFilterCount);
-    dom.filterHook.addEventListener('change', updateFilterCount);
-    dom.filterVisual.addEventListener('change', updateFilterCount);
-    const filterMusicVibe = document.getElementById('filter-music-vibe');
-    if (filterMusicVibe) {
-        filterMusicVibe.addEventListener('change', () => {
-            applyFilters();
-            updateFilterCount();
-        });
-    }
-
 
     // Form
     // dom.form.addEventListener('submit', handleSaveVideo); // Changed to button click
@@ -264,6 +225,9 @@ async function init() {
 
     // Voice Input
     initVoiceInput();
+
+    // Hacker Hook Chips
+    initHackerHookChips();
 
 
     // SDK Init
@@ -419,29 +383,8 @@ function clearFilters() {
     dom.filterHook.value = '';
     dom.filterVisual.value = '';
     dom.filterWeek.checked = false;
-    const filterMusicVibe = document.getElementById('filter-music-vibe');
-    if (filterMusicVibe) filterMusicVibe.value = '';
 
     applyFilters();
-    updateFilterCount();
-}
-
-function updateFilterCount() {
-    let count = 0;
-
-    if (dom.searchInput.value) count++;
-    if (dom.filterStatus.value) count++;
-    if (dom.filterHook.value) count++;
-    if (dom.filterVisual.value) count++;
-    const filterMusicVibe = document.getElementById('filter-music-vibe');
-    if (filterMusicVibe && filterMusicVibe.value) count++;
-    if (dom.filterWeek.checked) count++;
-
-    const badge = document.getElementById('active-filters-count');
-    if (badge) {
-        badge.textContent = count;
-        badge.style.display = count > 0 ? 'block' : 'none';
-    }
 }
 
 function setViewMode(mode) {
@@ -574,10 +517,6 @@ function renderKanban() {
         column.appendChild(body);
         container.appendChild(column);
     });
-
-    // Create Page Indicators
-    createPageIndicators(statuses.length);
-    updatePageIndicators();
 }
 
 function createKanbanCard(video) {
@@ -602,73 +541,9 @@ function createKanbanCard(video) {
         card.classList.remove('dragging');
     });
 
-    // Touch Events for Mobile Drag-and-Drop
-    let touchStartX, touchStartY, isDragging = false;
-
-    card.addEventListener('touchstart', (e) => {
-        touchStartX = e.touches[0].clientX;
-        touchStartY = e.touches[0].clientY;
-        isDragging = false;
-    }, { passive: true });
-
-    card.addEventListener('touchmove', (e) => {
-        if (!isDragging) {
-            const touchX = e.touches[0].clientX;
-            const touchY = e.touches[0].clientY;
-            const deltaX = Math.abs(touchX - touchStartX);
-            const deltaY = Math.abs(touchY - touchStartY);
-
-            // Start dragging if moved more than 10px
-            if (deltaX > 10 || deltaY > 10) {
-                isDragging = true;
-                card.classList.add('dragging');
-            }
-        }
-    }, { passive: true });
-
-    card.addEventListener('touchend', async (e) => {
-        if (isDragging) {
-            card.classList.remove('dragging');
-
-            // Get the element at touch position
-            const touch = e.changedTouches[0];
-            const elementAtPoint = document.elementFromPoint(touch.clientX, touch.clientY);
-
-            // Find the kanban column
-            let targetColumn = elementAtPoint;
-            while (targetColumn && !targetColumn.classList.contains('kanban-column')) {
-                targetColumn = targetColumn.parentElement;
-            }
-
-            if (targetColumn) {
-                const newStatus = targetColumn.dataset.status;
-                if (newStatus && video.status !== newStatus) {
-                    // Update video status
-                    video.status = newStatus;
-
-                    // Save to database
-                    await window.dataSdk.update({
-                        ...video,
-                        status: newStatus
-                    });
-
-                    // Force immediate visual update
-                    renderKanban();
-                }
-            }
-
-            isDragging = false;
-        } else {
-            // If not dragging, treat as a tap to open modal
-            openModal(video);
-        }
-    });
-
     card.onclick = (e) => {
-        // Only open modal if not from touch (touch is handled above)
-        if (!isDragging && e.type !== 'touchend') {
-            openModal(video);
-        }
+        // Prevent click when dragging end logic might fire
+        openModal(video);
     };
 
     card.innerHTML = `
@@ -684,70 +559,6 @@ function createKanbanCard(video) {
         ` : ''}
     `;
     return card;
-}
-
-// ========================================
-// PAGE INDICATORS (Trello-Style Mobile Navigation)
-// ========================================
-
-function createPageIndicators(count) {
-    const indicatorsContainer = document.getElementById('page-indicators');
-    if (!indicatorsContainer) return;
-
-    indicatorsContainer.innerHTML = '';
-
-    for (let i = 0; i < count; i++) {
-        const indicator = document.createElement('div');
-        indicator.className = 'page-indicator';
-        indicator.dataset.index = i;
-
-        // Click to navigate to column
-        indicator.addEventListener('click', () => {
-            const container = dom.kanbanContainer;
-            const columnWidth = container.offsetWidth;
-            container.scrollTo({
-                left: columnWidth * i,
-                behavior: 'smooth'
-            });
-        });
-
-        indicatorsContainer.appendChild(indicator);
-    }
-}
-
-function updatePageIndicators() {
-    const container = dom.kanbanContainer;
-    const indicators = document.querySelectorAll('.page-indicator');
-
-    if (!container || indicators.length === 0) return;
-
-    // Remove existing scroll listener if any
-    container.removeEventListener('scroll', handleKanbanScroll);
-
-    // Add scroll listener
-    container.addEventListener('scroll', handleKanbanScroll);
-
-    // Initial update
-    handleKanbanScroll();
-}
-
-function handleKanbanScroll() {
-    const container = dom.kanbanContainer;
-    const indicators = document.querySelectorAll('.page-indicator');
-
-    if (!container || indicators.length === 0) return;
-
-    const scrollLeft = container.scrollLeft;
-    const columnWidth = container.offsetWidth;
-    const currentIndex = Math.round(scrollLeft / columnWidth);
-
-    indicators.forEach((indicator, index) => {
-        if (index === currentIndex) {
-            indicator.classList.add('active');
-        } else {
-            indicator.classList.remove('active');
-        }
-    });
 }
 
 async function handleDrop(e, newStatus) {
@@ -766,17 +577,10 @@ async function handleDrop(e, newStatus) {
     );
 
     if (video && video.status !== newStatus) {
-        // Update video status locally
-        video.status = newStatus;
-
-        // Save to database
         await window.dataSdk.update({
             ...video,
             status: newStatus
         });
-
-        // Force immediate visual update
-        renderKanban();
     }
 }
 
@@ -902,6 +706,8 @@ function openModal(video = null) {
         document.getElementById('voiceover').value = video.voiceover || '';
         document.getElementById('cta').value = video.cta || '';
         document.getElementById('notes').value = video.notes || '';
+        // Restore hacker hook
+        setHackerHook(video.hacker_hook || '');
         // Don't fill GPT fields as they are for generation
         dom.gptPrompt.value = '';
         dom.promptFeedback.style.display = 'none';
@@ -917,6 +723,8 @@ function openModal(video = null) {
         // Ensure new fields are cleared
         document.getElementById('music-vibe').value = '';
         document.getElementById('video-duration').value = 'short';
+        // Reset hacker hook
+        setHackerHook('');
     }
 }
 
@@ -1025,6 +833,7 @@ async function handleSaveVideo(e) {
         voiceover: document.getElementById('voiceover').value,
         cta: document.getElementById('cta').value,
         notes: document.getElementById('notes').value,
+        hacker_hook: document.getElementById('hacker-hook').value,
     };
 
     try {
@@ -1131,6 +940,7 @@ function generatePrompt() {
     const cta = document.getElementById('cta').value || "[NÃO ESPECIFICADO]";
     const wordPreset = dom.wordPreset.value !== 'Custom' ? dom.wordPreset.value : `${dom.wordLimit.value} palavras`;
     const duration = document.getElementById('video-duration').value || 'short';
+    const hackerHook = document.getElementById('hacker-hook').value || '';
 
     // Get dynamic timeline based on duration
     const timeline = getTimelineByDuration(duration);
@@ -1148,6 +958,43 @@ function generatePrompt() {
         'long': '25-30 segundos (Longo - Narrativa Rica)'
     };
 
+    // Build hacker hook intensification block if selected
+    let hackerHookBlock = '';
+    if (hackerHook) {
+        const hackerHookDescriptions = {
+            'Polêmica': {
+                desc: 'Ganchos que POLARIZAM opiniões e geram debate intenso nos comentários. Afirmações fortes que fazem as pessoas quererem concordar ou discordar publicamente.',
+                subtypes: 'Opinião Impopular, Desmistificação, Provocação Direta, Verdade Inconveniente, Contra a Maioria',
+                examples: '"Ninguém que treina de manhã realmente gosta de acordar cedo.", "Disciplina é uma mentira que te venderam.", "99% de quem fala de mindset nunca conquistou nada."'
+            },
+            'Crença Forte': {
+                desc: 'Ganchos que reafirmam ou DESAFIAM crenças profundas do público. Tocam em valores pessoais, identidade e princípios que as pessoas defendem com paixão.',
+                subtypes: 'Reafirmação de Identidade, Desafio de Crença, Manifesto Pessoal, Princípio Inegociável, Declaração de Valores',
+                examples: '"Se você não treina quando não quer, você não é disciplinado.", "A dor do treino é o preço do respeito próprio.", "Quem reclama do processo não merece o resultado."'
+            },
+            'Afirmação Contra Intuitiva': {
+                desc: 'Ganchos que apresentam o OPOSTO do que o público espera. Surpreendem com uma lógica invertida que faz a pessoa parar para pensar e querer entender.',
+                subtypes: 'Paradoxo, Inversão Lógica, Revelação Surpreendente, Mito Quebrado, Perspectiva Inversa',
+                examples: '"Treinar menos me fez evoluir mais.", "O dia que parei de buscar motivação, tudo mudou.", "Quanto mais eu descanso, mais forte eu fico."'
+            },
+            'Recompensa Rápida': {
+                desc: 'Ganchos que prometem um RESULTADO IMEDIATO ou uma transformação rápida. O espectador sente que vai ganhar algo valioso em poucos segundos.',
+                subtypes: 'Hack Rápido, Resultado em X Dias, Segredo Revelado, Atalho Prático, Mudança Instantânea',
+                examples: '"Em 7 dias sua rotina vai mudar completamente.", "Faça isso HOJE e veja a diferença amanhã.", "O exercício que destrói preguiça em 30 segundos."'
+            },
+            'Curiosidade': {
+                desc: 'Ganchos que criam uma LACUNA DE CONHECIMENTO irresistível. A pessoa PRECISA continuar assistindo para preencher essa lacuna mental.',
+                subtypes: 'Segredo Revelado, Lacuna de Conhecimento, Teaser Misterioso, Pergunta Sem Resposta, Revelação Gradual',
+                examples: '"O que acontece quando você treina 5h da manhã por 30 dias.", "Ninguém fala sobre esse detalhe do Jiu-Jitsu.", "Descobri algo que muda tudo sobre rotina."'
+            }
+        };
+
+        const hookInfo = hackerHookDescriptions[hackerHook];
+        if (hookInfo) {
+            hackerHookBlock = `\n\n---\n\n## 🔓 GANCHO HACKER ATIVADO: ${hackerHook.toUpperCase()}\n\n**INSTRUÇÃO ESPECIAL — INTENSIFICAR GANCHO**\n\n> O criador ativou o modo "Gancho Hacker". Isso significa que você deve ir ALÉM do gancho padrão e buscar as MELHORES e mais PODEROSAS variações do tipo "${hackerHook}".\n\n**O que é:** ${hookInfo.desc}\n\n**Sub-tipos para explorar nas 3 variações:** ${hookInfo.subtypes}\n\n**Exemplos de referência:** ${hookInfo.examples}\n\n### REGRAS DO GANCHO HACKER:\n1. **CADA variação (A, B, C) deve usar um sub-tipo DIFERENTE** do gancho "${hackerHook}"\n2. **O gancho deve aparecer nos primeiros 0-2 segundos** do vídeo, tanto em texto na tela quanto no conceito visual\n3. **Gere 3 opções de frase de gancho** para cada variação (o criador escolherá a melhor)\n4. **Considere o contexto do vídeo** (título: "${title}", conceito: "${concept}") para criar ganchos que sejam RELEVANTES e não genéricos\n5. **Avalie cada gancho de 1-10** em: Poder de Parada (scroll-stopping), Potencial de Engajamento (comentários), e Viralidade\n6. **Use linguagem direta, curta e impactante** — sem enrolação\n\n**FORMATO EXTRA para cada variação:**\n> 🔓 GANCHO HACKER — [Sub-tipo usado]\n> - Opção 1: "[frase]" → Poder: X/10 | Engajamento: X/10 | Viral: X/10\n> - Opção 2: "[frase]" → Poder: X/10 | Engajamento: X/10 | Viral: X/10\n> - Opção 3: "[frase]" → Poder: X/10 | Engajamento: X/10 | Viral: X/10\n> - ✅ Recomendação: [Opção X — justificativa rápida]`;
+        }
+    }
+
     const basePrompt = `# CONTEXTO: LIFESTYLE VIRAL AGENT - STRICT OUTPUT MODE
 
 ATUE COMO: O "Lifestyle Viral Agent".
@@ -1162,7 +1009,7 @@ MISSÃO: Gerar 3 variações de roteiro prontas para execução (filmáveis) par
 - **Duração Alvo:** ${durationLabels[duration]}
 - **Base Voiceover:** ${voiceover}
 - **CTA:** ${cta}
-- **Limite de Texto:** ${wordPreset} por tela
+- **Limite de Texto:** ${wordPreset} por tela${hackerHook ? `\n- **🔓 Gancho Hacker:** ${hackerHook}` : ''}
 
 ---
 
@@ -1198,6 +1045,31 @@ Você tem TOTAL LIBERDADE para ajustar as seguintes configurações em CADA VARI
 - Sempre justifique suas escolhas na "Ficha Técnica" de cada variação
 - Explique POR QUE você ajustou duração/texto (ex: "Reduzido para 8s para maximizar retenção")
 - Cada variação deve ter um ARQUÉTIPO diferente (ex: Hook Explosivo, Storytelling, Narrativa Profunda)
+${hackerHookBlock}
+
+---
+
+## 🎯 FILTRO DE MENSAGEM (3 TESTES OBRIGATÓRIOS)
+
+Antes de entregar CADA variação, avalie a mensagem principal (gancho + texto na tela) contra estes 3 testes. Se QUALQUER teste falhar, reescreva até passar.
+
+### TESTE 1: 🧠 CAIXA DE CURIOSIDADE
+**Pergunta:** A pessoa fica querendo saber o que vem depois?
+- ❌ Exemplo FRACO: "3 dicas de produtividade" → Não abre curiosidade, é genérico
+- ✅ Exemplo FORTE: "Porque acordar cedo está te atrasando" → Abre uma caixa de curiosidade na mente
+- **Regra:** A frase deve criar uma LACUNA mental que SÓ se resolve assistindo o vídeo
+
+### TESTE 2: 💔 CONEXÃO PELA DOR
+**Pergunta:** Estou falando sobre algo que INCOMODA as pessoas?
+- ❌ Exemplo FRACO: "Treino completo de pernas" → Fala sobre técnica, não conecta emocionalmente
+- ✅ Exemplo FORTE: "Por que você treina todos os dias e as suas pernas não crescem" → Fala sobre FRUSTRAÇÃO
+- **Regra:** Pessoas se conectam MUITO mais rápido quando se VEEM naquele conteúdo. Toque na dor, frustração ou desejo reprimido
+
+### TESTE 3: 💬 SIMPLICIDADE BRUTAL
+**Pergunta:** O que estou falando é simples de entender? Ou estou complicando demais?
+- ❌ Exemplo FRACO: "Otimização tributária através da PJotização" → Linguagem técnica, repele o público
+- ✅ Exemplo FORTE: "Como pagar menos impostos virando PJ" → Qualquer pessoa entende em 1 segundo
+- **Regra:** Se uma pessoa de 12 anos não entender a frase em 2 segundos, REESCREVA
 
 ---
 
@@ -1222,7 +1094,7 @@ ${timelineRows}
 - [ ] Take 2: [...]
 - [ ] Take 3: [...]
 
-**4. LEGENDAS & TAGS**
+**4. LEGENDAS \& TAGS**
 - **Legenda:**
   - Gancho: [Frase inicial]
   - Corpo: [História/Reflexão expandida]
@@ -1233,11 +1105,65 @@ ${timelineRows}
   - #Viral: #lifestyle #motivation #1percentbetter
   - #Local: #brasil #sp (se aplicar)
 
+**5. 🎯 FILTRO DE MENSAGEM**
+| Teste | Nota (1-10) | Análise |
+|-------|-------------|---------|
+| 🧠 Caixa de Curiosidade | X/10 | [A pessoa PRECISA ver o que vem depois? Justifique] |
+| 💔 Conexão pela Dor | X/10 | [Toca em frustração/desejo real? Justifique] |
+| 💬 Simplicidade Brutal | X/10 | [Entendível em 2 segundos? Justifique] |
+- **Média:** X/10
+- ⚠️ Se qualquer nota < 7, reescreva o gancho/texto principal AQUI com versão melhorada
+
 ---
 
 GERE AGORA AS 3 VARIAÇÕES SEGUINDO ESTE MODELO EXATO.`;
 
     dom.gptPrompt.value = basePrompt.trim();
+}
+
+// --- Hacker Hook Chips ---
+
+function initHackerHookChips() {
+    const container = document.getElementById('hacker-hook-chips');
+    if (!container) return;
+
+    container.addEventListener('click', (e) => {
+        const chip = e.target.closest('.hacker-chip');
+        if (!chip) return;
+
+        const hookValue = chip.dataset.hook;
+        const hiddenInput = document.getElementById('hacker-hook');
+        const isActive = chip.classList.contains('active');
+
+        // Deselect all chips
+        container.querySelectorAll('.hacker-chip').forEach(c => c.classList.remove('active'));
+
+        if (isActive) {
+            // Toggle off
+            hiddenInput.value = '';
+        } else {
+            // Select this chip
+            chip.classList.add('active');
+            hiddenInput.value = hookValue;
+        }
+    });
+}
+
+function setHackerHook(value) {
+    const hiddenInput = document.getElementById('hacker-hook');
+    const container = document.getElementById('hacker-hook-chips');
+    if (!hiddenInput || !container) return;
+
+    hiddenInput.value = value;
+
+    // Update chip visuals
+    container.querySelectorAll('.hacker-chip').forEach(chip => {
+        if (value && chip.dataset.hook === value) {
+            chip.classList.add('active');
+        } else {
+            chip.classList.remove('active');
+        }
+    });
 }
 
 function copyPromptToClipboard() {
