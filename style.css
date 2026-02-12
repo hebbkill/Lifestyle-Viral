@@ -1,228 +1,343 @@
-/* Base Reset & Variables */
+/* =============================================
+   LIFESTYLE VIRAL — PREMIUM DESIGN SYSTEM
+   Mobile-First | Dark Premium | Golden Accent
+   ============================================= */
+
+/* --- Design Tokens --- */
 :root {
-  --font-main: 'Inter', sans-serif;
-  --font-mono: 'Space Mono', monospace;
-  --bg-color: #000000;
-  --text-color: #ffffff;
-  --glass-bg: rgba(255, 255, 255, 0.03);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-blur: 10px;
+  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'Space Mono', 'SF Mono', monospace;
+
+  /* Background */
+  --bg-deep: #050508;
+  --bg-surface: #0c0c14;
+  --bg-elevated: #111119;
+  --bg-card: rgba(255, 255, 255, 0.035);
+
+  /* Text */
+  --text-primary: #f0f0f5;
+  --text-secondary: rgba(255, 255, 255, 0.55);
+  --text-muted: rgba(255, 255, 255, 0.35);
+
+  /* Accent — Gold */
+  --accent: #c9a84c;
+  --accent-light: #e8c547;
+  --accent-glow: rgba(201, 168, 76, 0.25);
+
+  /* Glass */
+  --glass-bg: rgba(255, 255, 255, 0.04);
+  --glass-bg-hover: rgba(255, 255, 255, 0.07);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-border-hover: rgba(255, 255, 255, 0.15);
+  --glass-blur: 16px;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-pill: 9999px;
+
+  /* Shadows */
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
+  --shadow-elevated: 0 8px 40px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 20px var(--accent-glow);
+
+  /* Status Colors */
+  --status-ideia: #8b5cf6;
+  --status-roteirizando: #f59e0b;
+  --status-takes: #3b82f6;
+  --status-editando: #ec4899;
+  --status-agendado: #06b6d4;
+  --status-publicado: #10b981;
+}
+
+/* --- Global Reset & Base --- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
+  background: var(--bg-deep);
+  background-image:
+    radial-gradient(ellipse at 20% 0%, rgba(201, 168, 76, 0.03) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 100%, rgba(99, 102, 241, 0.03) 0%, transparent 60%);
+  color: var(--text-primary);
   margin: 0;
   font-family: var(--font-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .font-mono-custom {
   font-family: var(--font-mono);
 }
 
-/* Glassmorphism Utility */
+/* --- Scrollbar --- */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-pill);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* --- Glass Effect (Upgraded) --- */
 .glass-effect {
   background: var(--glass-bg);
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
   border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  transition: border-color 0.3s ease, background 0.3s ease;
 }
 
-/* Scrollbar Customization */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+.glass-effect:hover {
+  border-color: var(--glass-border-hover);
 }
 
-::-webkit-scrollbar-track {
-  background: #0a0a0a;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
-/* Card Hover */
+/* --- Card Hover --- */
 .card-hover {
-  transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.3s ease,
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .card-hover:hover {
-  transform: translateY(-2px);
-  border-color: rgba(255, 255, 255, 0.3);
-  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-3px);
+  border-color: var(--glass-border-hover);
+  background: var(--glass-bg-hover);
+  box-shadow: var(--shadow-card);
 }
 
-/* Grid Layouts */
+/* --- Content Grid --- */
 .content-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
-/* Week Separator */
+@media (max-width: 640px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}
+
+/* --- Week Separator --- */
 .week-separator {
   display: flex;
   align-items: center;
-  margin: 2rem 0 1.5rem 0;
+  margin: 2rem 0 1.25rem;
 }
 
 .week-separator::after {
   content: '';
   flex: 1;
   height: 1px;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%);
+  background: linear-gradient(90deg, rgba(201, 168, 76, 0.3) 0%, transparent 80%);
   margin-left: 1rem;
 }
 
 .week-label {
-  font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.5);
-  letter-spacing: 2px;
-  font-weight: 700;
-}
-
-/* Modals */
-.modal-backdrop {
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(5px);
-}
-
-.modal-content {
-  max-height: 90vh;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background: #000;
-}
-
-/* Status Badges */
-.status-badge {
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
   font-size: 0.75rem;
+  color: var(--accent);
+  letter-spacing: 2.5px;
   font-weight: 700;
-  font-family: var(--font-mono);
   text-transform: uppercase;
 }
 
+/* --- Modal --- */
+.modal-backdrop {
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.modal-content {
+  max-height: 92vh;
+  max-height: 92dvh;
+  border: 1px solid var(--glass-border);
+  background: var(--bg-surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-elevated);
+  overflow: hidden;
+}
+
+@media (max-width: 640px) {
+  .modal-content {
+    max-height: 100vh;
+    max-height: 100dvh;
+    border-radius: 0;
+    margin: 0 !important;
+    max-width: 100% !important;
+  }
+}
+
+/* --- Status Badges (Premium) --- */
+.status-badge {
+  padding: 0.2rem 0.65rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.65rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
 .hook-badge {
-  padding: 0.1rem 0.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 4px;
+  padding: 0.15rem 0.5rem;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  border-radius: var(--radius-sm);
+  font-size: 0.65rem;
+  color: var(--text-secondary);
 }
 
 /* --- Kanban Board Premium --- */
 #kanban-container {
   display: flex;
-  gap: 1.5rem;
+  gap: 1rem;
   height: calc(100vh - 250px);
-  padding-bottom: 1.5rem;
+  padding-bottom: 1rem;
   overflow-x: auto;
   scroll-behavior: smooth;
   align-items: flex-start;
-  scroll-padding: 1rem;
+  scroll-padding: 0.5rem;
+  scroll-snap-type: x mandatory;
 }
 
 .kanban-column {
-  min-width: 320px;
-  width: 320px;
+  min-width: 300px;
+  width: 300px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
   height: 100%;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-card);
+  scroll-snap-align: start;
+  overflow: hidden;
 }
 
 .kanban-column:hover {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.12);
+  border-color: var(--glass-border-hover);
+  background: var(--glass-bg-hover);
 }
 
 .kanban-header {
-  padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--glass-border);
   font-family: var(--font-mono);
   font-weight: bold;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  color: rgba(255, 255, 255, 0.9);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, transparent 100%);
-  letter-spacing: 1px;
+  color: var(--text-primary);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.035) 0%, transparent 100%);
+  letter-spacing: 1.5px;
 }
 
 .kanban-header::after {
   content: attr(data-count);
-  background: rgba(255, 255, 255, 0.1);
-  padding: 0.25rem 0.625rem;
-  border-radius: 12px;
-  font-size: 0.75rem;
+  background: var(--accent-glow);
+  color: var(--accent-light);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.7rem;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.7);
+  min-width: 1.5rem;
+  text-align: center;
 }
 
 .kanban-body {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 1.25rem;
+  padding: 0.75rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  min-height: 120px;
+  gap: 0.6rem;
+  min-height: 100px;
 }
 
-/* Empty State */
 .kanban-body:empty::before {
   content: 'Arraste cards aqui';
   display: block;
   text-align: center;
-  color: rgba(255, 255, 255, 0.2);
-  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
   font-family: var(--font-mono);
-  padding: 2rem 1rem;
-  border: 2px dashed rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
+  padding: 1.5rem 1rem;
+  border: 2px dashed rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
 }
 
-/* Drag & Drop Premium Visuals */
+/* Drag Over */
 .kanban-column.drag-over {
-  background: rgba(59, 130, 246, 0.08);
-  border-color: rgba(59, 130, 246, 0.4);
-  box-shadow: 0 0 30px rgba(59, 130, 246, 0.15), 0 4px 20px rgba(0, 0, 0, 0.3);
-  transform: scale(1.02);
+  background: rgba(201, 168, 76, 0.06);
+  border-color: rgba(201, 168, 76, 0.35);
+  box-shadow: 0 0 30px rgba(201, 168, 76, 0.1), var(--shadow-card);
+  transform: scale(1.01);
 }
 
 .kanban-column.drag-over .kanban-header {
-  color: rgba(59, 130, 246, 1);
+  color: var(--accent-light);
 }
 
+/* Kanban Card */
 .kanban-card {
   cursor: grab;
   user-select: none;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: var(--bg-elevated);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+.kanban-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--accent);
+  border-radius: 0 2px 2px 0;
+  opacity: 0.6;
 }
 
 .kanban-card:hover {
-  transform: translateY(-3px) scale(1.01);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-  border-color: rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.06);
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  border-color: var(--glass-border-hover);
+  background: rgba(255, 255, 255, 0.055);
 }
 
 .kanban-card:active {
@@ -230,77 +345,88 @@ body {
 }
 
 .kanban-card.dragging {
-  opacity: 0.6;
-  transform: rotate(3deg) scale(1.05);
-  filter: brightness(1.2);
-  border: 2px solid rgba(59, 130, 246, 0.6);
-  box-shadow: 0 12px 48px rgba(59, 130, 246, 0.3);
+  opacity: 0.5;
+  transform: rotate(2deg) scale(1.04);
+  filter: brightness(1.15);
+  border: 2px solid var(--accent);
+  box-shadow: 0 12px 40px rgba(201, 168, 76, 0.2);
   z-index: 1000;
 }
 
-/* Drag Placeholder */
 .kanban-drag-placeholder {
-  height: 100px;
-  margin: 1rem 0;
-  border: 2px dashed rgba(59, 130, 246, 0.4);
-  border-radius: 8px;
-  background: rgba(59, 130, 246, 0.05);
-  position: relative;
+  height: 80px;
+  margin: 0.5rem 0;
+  border: 2px dashed rgba(201, 168, 76, 0.3);
+  border-radius: var(--radius-md);
+  background: rgba(201, 168, 76, 0.04);
   animation: pulse 1.5s ease-in-out infinite;
 }
 
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
   }
+
   50% {
-    opacity: 0.6;
+    opacity: 0.5;
   }
 }
 
-/* Link Style */
+/* --- Link Style --- */
 .ref-link {
-  color: #60a5fa;
+  color: var(--accent-light);
   text-decoration: none;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  margin-top: 8px;
+  margin-top: 6px;
   transition: all 0.2s ease;
+  opacity: 0.8;
 }
 
 .ref-link:hover {
-  color: #93c5fd;
+  color: var(--accent);
+  opacity: 1;
   text-decoration: underline;
   transform: translateX(2px);
 }
 
-/* View Toggle Buttons */
+/* --- View Toggle (Segmented) --- */
+button#view-grid-btn,
+button#view-kanban-btn {
+  border-radius: var(--radius-sm);
+  transition: all 0.25s ease;
+  font-size: 0.7rem;
+  padding: 0.5rem 1rem;
+}
+
 button#view-grid-btn.active,
 button#view-kanban-btn.active {
-  background: white;
-  color: black;
+  background: var(--text-primary);
+  color: var(--bg-deep);
   opacity: 1;
-  border-color: white;
+  border-color: var(--text-primary);
+  box-shadow: 0 2px 12px rgba(255, 255, 255, 0.1);
 }
 
 button#view-grid-btn:not(.active),
 button#view-kanban-btn:not(.active) {
   background: transparent;
-  color: rgba(255, 255, 255, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: all 0.2s ease;
+  color: var(--text-secondary);
+  border: 1px solid var(--glass-border);
 }
 
 button#view-grid-btn:not(.active):hover,
 button#view-kanban-btn:not(.active):hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.9);
-  border-color: rgba(255, 255, 255, 0.3);
+  background: var(--glass-bg-hover);
+  color: var(--text-primary);
+  border-color: var(--glass-border-hover);
 }
 
-/* Voice Input Buttons */
+/* --- Voice Input --- */
 .voice-input-wrapper {
   position: relative;
   display: flex;
@@ -308,35 +434,33 @@ button#view-kanban-btn:not(.active):hover {
   gap: 0.5rem;
 }
 
-.voice-input-wrapper > div {
+.voice-input-wrapper>div {
   flex: 1;
 }
 
 .voice-btn {
   flex-shrink: 0;
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.7);
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.25rem;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  position: relative;
+  font-size: 1.1rem;
   margin-top: 28px;
 }
 
 .voice-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.3);
-  color: rgba(255, 255, 255, 0.9);
+  background: var(--glass-bg-hover);
+  border-color: var(--accent);
+  color: var(--accent-light);
   transform: translateY(-1px);
+  box-shadow: 0 0 12px var(--accent-glow);
 }
 
 .voice-btn:active:not(:disabled) {
@@ -344,29 +468,29 @@ button#view-kanban-btn:not(.active):hover {
 }
 
 .voice-btn:disabled {
-  opacity: 0.3;
+  opacity: 0.25;
   cursor: not-allowed;
-  background: rgba(255, 255, 255, 0.02);
 }
 
-/* Recording State */
 .voice-btn.recording {
-  background: rgba(239, 68, 68, 0.2);
+  background: rgba(239, 68, 68, 0.15);
   border-color: rgba(239, 68, 68, 0.5);
   color: #ef4444;
   animation: pulse-recording 1.5s ease-in-out infinite;
 }
 
 @keyframes pulse-recording {
-  0%, 100% {
-    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6);
   }
+
   50% {
     box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
   }
 }
 
-/* Tooltip */
 .voice-btn[title]:hover::after {
   content: attr(title);
   position: absolute;
@@ -374,15 +498,15 @@ button#view-kanban-btn:not(.active):hover {
   left: 50%;
   transform: translateX(-50%);
   margin-bottom: 8px;
-  padding: 6px 12px;
-  background: rgba(0, 0, 0, 0.9);
-  color: white;
-  font-size: 0.75rem;
+  padding: 5px 10px;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-size: 0.7rem;
   white-space: nowrap;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   pointer-events: none;
   z-index: 1000;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--glass-border);
   font-family: var(--font-main);
   font-weight: 500;
 }
@@ -395,22 +519,22 @@ button#view-kanban-btn:not(.active):hover {
   transform: translateX(-50%);
   margin-bottom: 2px;
   border: 4px solid transparent;
-  border-top-color: rgba(0, 0, 0, 0.9);
+  border-top-color: var(--bg-surface);
   pointer-events: none;
   z-index: 1000;
 }
 
-/* Hacker Hook Chips */
+/* --- Hacker Hook Chips --- */
 .hacker-chip {
-  padding: 0.4rem 0.85rem;
-  font-size: 0.75rem;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.7rem;
   font-family: var(--font-mono);
   font-weight: 600;
-  letter-spacing: 0.5px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: rgba(255, 255, 255, 0.55);
-  border-radius: 6px;
+  letter-spacing: 0.3px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  border-radius: var(--radius-pill);
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
@@ -418,14 +542,366 @@ button#view-kanban-btn:not(.active):hover {
 
 .hacker-chip:hover {
   background: rgba(16, 185, 129, 0.08);
-  border-color: rgba(16, 185, 129, 0.35);
+  border-color: rgba(16, 185, 129, 0.3);
   color: rgba(16, 185, 129, 0.9);
   transform: translateY(-1px);
 }
 
 .hacker-chip.active {
-  background: rgba(16, 185, 129, 0.15);
-  border-color: rgba(16, 185, 129, 0.6);
+  background: rgba(16, 185, 129, 0.14);
+  border-color: rgba(16, 185, 129, 0.5);
   color: #10b981;
-  box-shadow: 0 0 12px rgba(16, 185, 129, 0.15), inset 0 0 8px rgba(16, 185, 129, 0.05);
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.12);
+}
+
+/* =============================================
+   MOBILE-FIRST OVERRIDES
+   ============================================= */
+
+/* --- Header Mobile --- */
+@media (max-width: 640px) {
+
+  /* Header buttons stack */
+  header .px-6 {
+    padding: 1rem 1rem !important;
+  }
+
+  header .flex.items-center.justify-between.mb-6 {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    margin-bottom: 1rem !important;
+  }
+
+  header .flex.items-center.justify-between.mb-6>div:first-child {
+    text-align: center;
+  }
+
+  header .flex.items-center.justify-between.mb-6>div:last-child {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  header .flex.items-center.justify-between.mb-6>div:last-child>button {
+    flex: 1;
+    text-align: center;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    font-size: 0.75rem;
+  }
+
+  /* Stats grid 2x2 */
+  header .grid.grid-cols-4 {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.5rem !important;
+  }
+
+  /* Weekly goal compact */
+  header .glass-effect.p-4.mt-4 {
+    padding: 0.75rem !important;
+  }
+
+  header .glass-effect.p-4.mt-4 .flex.items-center.justify-between.mb-3 {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  header .glass-effect.p-4.mt-4 .flex.items-center.gap-3:first-child {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  header .glass-effect.p-4.mt-4 .flex.items-center.gap-3:last-child {
+    justify-content: center;
+  }
+}
+
+/* --- Stats Card Styling --- */
+header .glass-effect.p-4.text-center {
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
+  border: 1px solid var(--glass-border);
+  position: relative;
+  overflow: hidden;
+}
+
+header .glass-effect.p-4.text-center::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0.5;
+}
+
+/* --- Filter Toolbar Mobile --- */
+@media (max-width: 640px) {
+  main>.glass-effect.p-4.mb-6 {
+    padding: 0.75rem !important;
+    margin-bottom: 1rem !important;
+    border-radius: var(--radius-lg);
+  }
+
+  main .grid.grid-cols-12 {
+    display: flex !important;
+    flex-direction: column;
+    gap: 0.5rem !important;
+  }
+
+  main .grid.grid-cols-12>* {
+    width: 100% !important;
+  }
+
+  /* View toggles */
+  .flex.justify-end.mb-4.gap-2 {
+    justify-content: center !important;
+    margin-bottom: 1rem !important;
+  }
+}
+
+/* --- Form Inputs Premium --- */
+input,
+select,
+textarea {
+  border-radius: var(--radius-sm) !important;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px var(--accent-glow), 0 0 12px rgba(201, 168, 76, 0.1);
+}
+
+/* --- Modal Form Sections --- */
+.modal-content form .border-l-2 {
+  border-left-width: 2px;
+  border-image: linear-gradient(to bottom, var(--accent), transparent) 1;
+  padding-left: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.modal-content form .border-l-2 h4 {
+  color: var(--accent) !important;
+  font-size: 0.7rem !important;
+  letter-spacing: 2px !important;
+}
+
+/* Ganchos Hacker section keeps green */
+.modal-content form .border-l-2[style*="rgba(16, 185, 129"] {
+  border-image: linear-gradient(to bottom, #10b981, transparent) 1;
+}
+
+.modal-content form .border-l-2[style*="rgba(16, 185, 129"] h4 {
+  color: rgba(16, 185, 129, 0.9) !important;
+}
+
+/* --- Save/Delete Buttons --- */
+#save-btn {
+  border-radius: var(--radius-md) !important;
+  transition: all 0.25s ease;
+  font-size: 0.85rem;
+  position: relative;
+  overflow: hidden;
+}
+
+#save-btn:hover {
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
+}
+
+#save-btn:active {
+  transform: translateY(0);
+}
+
+#delete-btn {
+  border-radius: var(--radius-md) !important;
+  transition: all 0.25s ease;
+  font-size: 0.85rem;
+}
+
+#delete-btn:hover {
+  box-shadow: 0 4px 20px rgba(239, 68, 68, 0.25);
+  transform: translateY(-1px);
+}
+
+/* --- Progress Bar Glow --- */
+#progress-bar {
+  border-radius: var(--radius-pill);
+  position: relative;
+  background: linear-gradient(90deg, var(--accent), var(--accent-light)) !important;
+}
+
+#progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 30px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3));
+  border-radius: inherit;
+  animation: bar-glow 2s ease-in-out infinite;
+}
+
+@keyframes bar-glow {
+
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* --- Help Button --- */
+#help-btn {
+  border-radius: var(--radius-md) !important;
+}
+
+#new-video-btn {
+  border-radius: var(--radius-md) !important;
+  background: linear-gradient(135deg, #ffffff 0%, #e8e8e8 100%) !important;
+}
+
+#new-video-btn:hover {
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15);
+}
+
+/* --- Kanban Mobile --- */
+@media (max-width: 640px) {
+  #kanban-container {
+    flex-direction: column;
+    height: auto !important;
+    overflow-x: hidden;
+    gap: 0.75rem;
+    scroll-snap-type: none;
+  }
+
+  .kanban-column {
+    min-width: 100%;
+    width: 100%;
+    height: auto;
+    max-height: none;
+  }
+
+  .kanban-body {
+    max-height: 350px;
+    overflow-y: auto;
+  }
+}
+
+/* --- Global Mobile Spacing --- */
+@media (max-width: 640px) {
+  main.flex-1 {
+    padding: 0.75rem !important;
+  }
+
+  #clear-filters {
+    width: 100%;
+    text-align: center;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    margin-top: 0.25rem;
+  }
+
+  /* Modal mobile padding */
+  .modal-content form {
+    padding: 1rem !important;
+  }
+
+  .modal-content .p-6.border-b {
+    padding: 1rem !important;
+  }
+
+  .modal-content .flex.gap-3.mt-8 {
+    margin-top: 1.5rem !important;
+    flex-direction: column;
+    gap: 0.5rem !important;
+  }
+
+  .modal-content .flex.gap-3.mt-8 button {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Grid cols-2 → cols-1 in modal */
+  .modal-content .grid.grid-cols-2 {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* --- Fade In Animation --- */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#app {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.modal-content {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+/* --- Selection Color --- */
+::selection {
+  background: var(--accent);
+  color: var(--bg-deep);
+}
+
+/* --- Smooth Scroll --- */
+html {
+  scroll-behavior: smooth;
+}
+
+/* --- Help Modal Mobile --- */
+@media (max-width: 768px) {
+  #help-modal .glass-effect {
+    flex-direction: column;
+    border-radius: var(--radius-lg) !important;
+    height: 90vh !important;
+    height: 90dvh !important;
+  }
+
+  #help-modal .w-64 {
+    width: 100% !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--glass-border);
+    flex-shrink: 0;
+    max-height: 180px;
+    overflow-y: auto;
+  }
+
+  #help-modal .w-64 nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    padding: 0.5rem !important;
+  }
+
+  #help-modal .w-64 nav button {
+    font-size: 0.65rem;
+    padding: 0.35rem 0.6rem !important;
+    white-space: nowrap;
+  }
+
+  #help-modal .w-64 .p-6 {
+    padding: 0.75rem !important;
+  }
 }

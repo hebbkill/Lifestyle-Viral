@@ -30,12 +30,13 @@
 <body class="h-full font-main">
     <div id="app" class="h-full w-full flex flex-col">
         <!-- Header -->
-        <header style="background: #0a0a0a; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
-            <div class="px-6 py-6">
+        <header
+            style="background: linear-gradient(180deg, #0c0c14 0%, #080810 100%); border-bottom: 1px solid rgba(255, 255, 255, 0.06);">
+            <div class="px-4 sm:px-6 py-4 sm:py-6">
                 <div class="flex items-center justify-between mb-6">
                     <div>
-                        <h1 id="app-title" class="text-3xl font-bold font-mono-custom"
-                            style="color: #ffffff; letter-spacing: -1px;">LIFESTYLE VIRAL</h1>
+                        <h1 id="app-title" class="text-2xl sm:text-3xl font-bold font-mono-custom"
+                            style="color: #ffffff; letter-spacing: -0.5px;">LIFESTYLE VIRAL</h1>
                         <p id="creator-name" class="text-sm mt-1"
                             style="color: rgba(255, 255, 255, 0.5); letter-spacing: 2px;">ATHLETE &amp; CREATOR</p>
                     </div>
@@ -53,7 +54,7 @@
                     </div>
                 </div>
                 <!-- Stats Bar -->
-                <div class="grid grid-cols-4 gap-4">
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
                     <div class="glass-effect p-4 text-center">
                         <div id="total-videos" class="text-3xl font-bold font-mono-custom">0</div>
                         <div class="text-xs mt-1" style="color: rgba(255, 255, 255, 0.5); letter-spacing: 1px;">TOTAL
@@ -93,8 +94,8 @@
                                 style="color: #ef4444;">0%</span>
                         </div>
                     </div>
-                    <div class="w-full bg-black rounded-full h-3 overflow-hidden"
-                        style="border: 1px solid rgba(255, 255, 255, 0.2);">
+                    <div class="w-full rounded-full h-3.5 overflow-hidden"
+                        style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255, 255, 255, 0.08);">
                         <div id="progress-bar" class="h-full transition-all duration-500"
                             style="width: 0%; background: linear-gradient(90deg, #ef4444 0%, #f87171 100%);"></div>
                     </div>
@@ -103,18 +104,18 @@
         </header>
 
         <!-- Main Content -->
-        <main class="flex-1 overflow-auto p-6">
+        <main class="flex-1 overflow-auto p-3 sm:p-6">
             <!-- Filter Toolbar -->
             <div class="glass-effect p-4 mb-6">
                 <!-- Filter Controls -->
                 <div class="grid grid-cols-12 gap-4 mb-4">
                     <input type="text" id="search-input" placeholder="Buscar por título, conceito..."
-                        class="col-span-12 md:col-span-4 px-4 py-2 bg-black border text-white font-mono-custom text-sm"
-                        style="border-color: rgba(255, 255, 255, 0.2);">
+                        class="col-span-12 md:col-span-4 px-4 py-2.5 bg-black/50 border text-white font-mono-custom text-sm"
+                        style="border-color: rgba(255, 255, 255, 0.12);">
 
                     <select id="filter-status"
-                        class="col-span-6 md:col-span-2 px-2 py-2 bg-black border text-white font-mono-custom text-xs"
-                        style="border-color: rgba(255, 255, 255, 0.2);">
+                        class="col-span-6 md:col-span-2 px-3 py-2.5 bg-black/50 border text-white font-mono-custom text-xs"
+                        style="border-color: rgba(255, 255, 255, 0.12);">
                         <option value="">Status: Todos</option>
                         <option value="Ideia">Ideia</option>
                         <option value="Roteirizando">Roteirizando</option>
@@ -125,8 +126,8 @@
                     </select>
 
                     <select id="filter-hook"
-                        class="col-span-6 md:col-span-2 px-2 py-2 bg-black border text-white font-mono-custom text-xs"
-                        style="border-color: rgba(255, 255, 255, 0.2);">
+                        class="col-span-6 md:col-span-2 px-3 py-2.5 bg-black/50 border text-white font-mono-custom text-xs"
+                        style="border-color: rgba(255, 255, 255, 0.12);">
                         <option value="">Gancho: Todos</option>
                         <option value="Curiosidade">Curiosidade</option>
                         <option value="Pattern Interrupt">Pattern Interrupt</option>
@@ -137,8 +138,8 @@
                     </select>
 
                     <select id="filter-visual"
-                        class="col-span-6 md:col-span-2 px-2 py-2 bg-black border text-white font-mono-custom text-xs"
-                        style="border-color: rgba(255, 255, 255, 0.2);">
+                        class="col-span-6 md:col-span-2 px-3 py-2.5 bg-black/50 border text-white font-mono-custom text-xs"
+                        style="border-color: rgba(255, 255, 255, 0.12);">
                         <option value="">Estilo: Todos</option>
                         <option value="Slow Living">Slow Living</option>
                         <option value="Cinematic Travel">Cinematic Travel</option>
@@ -148,8 +149,8 @@
                         <option value="Energético / Esportivo">Energético / Esportivo</option>
                     </select>
                     <select id="filter-music-vibe"
-                        class="col-span-6 md:col-span-2 px-2 py-2 bg-black border text-white font-mono-custom text-xs"
-                        style="border-color: rgba(255, 255, 255, 0.2);">
+                        class="col-span-6 md:col-span-2 px-3 py-2.5 bg-black/50 border text-white font-mono-custom text-xs"
+                        style="border-color: rgba(255, 255, 255, 0.12);">
                         <option value="">Música: Todos</option>
                         <option value="Lo-fi / Calma">Lo-fi / Calma</option>
                         <option value="Pop Inspirador">Pop Inspirador</option>
@@ -189,9 +190,9 @@
 
     <!-- Modal -->
     <div id="modal" class="fixed inset-0 hidden items-center justify-center modal-backdrop" style="z-index: 1000;">
-        <div class="glass-effect rounded-none w-full max-w-2xl mx-4 modal-content flex flex-col">
-            <div class="p-6 border-b flex-shrink-0"
-                style="border-color: rgba(255, 255, 255, 0.1); background: rgba(0, 0, 0, 0.5);">
+        <div class="glass-effect w-full max-w-2xl mx-0 sm:mx-4 modal-content flex flex-col">
+            <div class="p-4 sm:p-6 border-b flex-shrink-0"
+                style="border-color: rgba(255, 255, 255, 0.06); background: linear-gradient(180deg, rgba(201, 168, 76, 0.05) 0%, transparent 100%);">
                 <div class="flex items-center justify-between">
                     <h3 id="modal-title" class="text-2xl font-bold font-mono-custom" style="letter-spacing: 1px;">
                         NOVO VÍDEO</h3>
