@@ -240,6 +240,9 @@ async function init() {
     // Filter Popup
     initFilterPopup();
 
+    // Help Modal
+    setupHelpModal();
+
 
     // SDK Init
     if (window.elementSdk && window.dataSdk) {
@@ -749,82 +752,69 @@ function closeModal() {
     editingVideo = null;
 }
 
-function openHelpModal() {
-    console.log('=== openHelpModal CALLED ===');
-    console.log('dom.helpModal:', dom.helpModal);
 
-    // Fallback: Query DOM directly if cache is undefined
-    const helpModal = dom.helpModal || document.getElementById('help-modal');
-    console.log('helpModal element:', helpModal);
+// --- Help Modal Logic ---
 
-    if (!helpModal) {
-        console.error('ERROR: help-modal element not found in DOM!');
-        alert('Erro: Modal de ajuda não encontrado. Verifique o console.');
-        return;
-    }
+function setupHelpModal() {
+    const helpModal = document.getElementById('help-modal');
+    if (!helpModal) return;
 
-    console.log('helpModal classes before:', helpModal.className);
-    helpModal.classList.remove('hidden');
-    console.log('helpModal classes after:', helpModal.className);
-
-    // Init tab navigation if not already done
     const tabs = helpModal.querySelectorAll('.nav-item');
     const sections = helpModal.querySelectorAll('.help-section');
 
-    console.log('Found tabs:', tabs.length);
-    console.log('Found sections:', sections.length);
-
-    if (tabs.length > 0 && !helpModal.hasAttribute('data-initialized')) {
-        console.log('Initializing tab navigation...');
-
-        function switchTab(targetId) {
-            console.log('Switching to tab:', targetId);
-            // Update nav
-            tabs.forEach(t => {
-                if (t.dataset.target === targetId) {
-                    t.classList.add('active', 'bg-white/10', 'text-white');
-                    t.classList.remove('text-white/70');
-                } else {
-                    t.classList.remove('active', 'bg-white/10', 'text-white');
-                    t.classList.add('text-white/70');
-                }
-            });
-
-            // Update content
-            sections.forEach(s => {
-                if (s.id === targetId) {
-                    s.classList.remove('hidden');
-                    s.classList.add('block', 'animate-fade-in');
-                } else {
-                    s.classList.add('hidden');
-                    s.classList.remove('block', 'animate-fade-in');
-                }
-            });
-        }
-
-        // Attach click listeners
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                switchTab(tab.dataset.target);
-            });
+    function switchTab(targetId) {
+        tabs.forEach(t => {
+            const isTarget = t.dataset.target === targetId;
+            if (isTarget) {
+                t.classList.add('active', 'bg-white/10', 'text-white');
+                t.classList.remove('text-white/70');
+            } else {
+                t.classList.remove('active', 'bg-white/10', 'text-white');
+                t.classList.add('text-white/70');
+            }
         });
 
-        // Default to home
-        switchTab('help-home');
-
-        // Mark as initialized
-        helpModal.setAttribute('data-initialized', 'true');
-        console.log('Tab navigation initialized successfully');
-    } else if (helpModal.hasAttribute('data-initialized')) {
-        console.log('Tab navigation already initialized');
+        sections.forEach(s => {
+            const isTarget = s.id === targetId;
+            if (isTarget) {
+                s.classList.remove('hidden');
+                s.classList.add('block', 'animate-fade-in');
+            } else {
+                s.classList.add('hidden');
+                s.classList.remove('block', 'animate-fade-in');
+            }
+        });
     }
 
-    console.log('=== openHelpModal COMPLETE ===');
+    tabs.forEach(tab => {
+        // Remove old listeners by cloning or just assume fresh start if this runs once
+        // To be safe against multiple inits, we can check a flag
+        if (tab.dataset.hasListener) return;
+
+        tab.addEventListener('click', () => switchTab(tab.dataset.target));
+        tab.dataset.hasListener = 'true';
+    });
+
+    // Initial tab
+    switchTab('help-home');
+}
+
+function openHelpModal() {
+    const helpModal = document.getElementById('help-modal');
+    if (helpModal) {
+        helpModal.classList.remove('hidden');
+        // Ensure setup runs (idempotent-ish)
+        setupHelpModal();
+    }
 }
 
 function closeHelpModal() {
-    dom.helpModal.classList.add('hidden');
+    const helpModal = document.getElementById('help-modal');
+    if (helpModal) helpModal.classList.add('hidden');
 }
+
+
+
 
 async function handleSaveVideo(e) {
     e.preventDefault();
