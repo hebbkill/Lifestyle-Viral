@@ -16,6 +16,7 @@ let filters = {
     status: '',
     hookType: '',
     visualStyle: '',
+    musicVibe: '',
     thisWeekOnly: false
 };
 let viewMode = 'grid'; // 'grid' | 'kanban'
@@ -49,6 +50,7 @@ async function init() {
     dom.filterStatus = document.getElementById('filter-status');
     dom.filterHook = document.getElementById('filter-hook');
     dom.filterVisual = document.getElementById('filter-visual');
+    dom.filterMusicVibe = document.getElementById('filter-music-vibe');
     dom.filterWeek = document.getElementById('filter-week');
     dom.clearFiltersBtn = document.getElementById('clear-filters');
 
@@ -178,6 +180,12 @@ async function init() {
         filters.visualStyle = e.target.value;
         applyFilters();
     });
+    if (dom.filterMusicVibe) {
+        dom.filterMusicVibe.addEventListener('change', (e) => {
+            filters.musicVibe = e.target.value;
+            applyFilters();
+        });
+    }
     dom.filterWeek.addEventListener('change', (e) => {
         filters.thisWeekOnly = e.target.checked;
         applyFilters();
@@ -228,6 +236,9 @@ async function init() {
 
     // Hacker Hook Chips
     initHackerHookChips();
+
+    // Filter Popup
+    initFilterPopup();
 
 
     // SDK Init
@@ -357,6 +368,7 @@ function applyFilters() {
     // Hooks & Visuals
     if (filters.hookType) filtered = filtered.filter(v => v.hook_type === filters.hookType);
     if (filters.visualStyle) filtered = filtered.filter(v => v.visual_style === filters.visualStyle);
+    if (filters.musicVibe) filtered = filtered.filter(v => v.music_vibe === filters.musicVibe);
 
     // Week
     if (filters.thisWeekOnly) {
@@ -367,6 +379,7 @@ function applyFilters() {
     videos = filtered;
     renderContent();
     updateStats();
+    updateActiveFiltersCount();
 }
 
 function clearFilters() {
@@ -375,14 +388,16 @@ function clearFilters() {
         status: '',
         hookType: '',
         visualStyle: '',
+        musicVibe: '',
         thisWeekOnly: false
     };
 
-    dom.searchInput.value = '';
-    dom.filterStatus.value = '';
-    dom.filterHook.value = '';
-    dom.filterVisual.value = '';
-    dom.filterWeek.checked = false;
+    if (dom.searchInput) dom.searchInput.value = '';
+    if (dom.filterStatus) dom.filterStatus.value = '';
+    if (dom.filterHook) dom.filterHook.value = '';
+    if (dom.filterVisual) dom.filterVisual.value = '';
+    if (dom.filterMusicVibe) dom.filterMusicVibe.value = '';
+    if (dom.filterWeek) dom.filterWeek.checked = false;
 
     applyFilters();
 }
@@ -1366,3 +1381,62 @@ document.addEventListener('DOMContentLoaded', () => {
     // Default to Grid view on load, but we need to trigger the class set
     setViewMode('grid');
 });
+
+// --- Filter Popup Logic ---
+function initFilterPopup() {
+    const overlay = document.getElementById('filter-popup-overlay');
+    const popup = document.getElementById('filter-popup');
+    const openBtn = document.getElementById('open-filters-btn');
+    const closeBtn = document.getElementById('close-filters-btn');
+    const applyBtn = document.getElementById('apply-filters-btn');
+
+    if (!overlay || !popup || !openBtn) return;
+
+    function openPopup() {
+        overlay.classList.remove('hidden');
+        // Trigger reflow
+        void popup.offsetWidth;
+        popup.style.transform = 'translateY(0)';
+    }
+
+    function closePopup() {
+        popup.style.transform = 'translateY(100%)';
+        setTimeout(() => {
+            overlay.classList.add('hidden');
+        }, 300);
+    }
+
+    openBtn.addEventListener('click', openPopup);
+    if (closeBtn) closeBtn.addEventListener('click', closePopup);
+    if (applyBtn) {
+        applyBtn.addEventListener('click', () => {
+            applyFilters();
+            closePopup();
+        });
+    }
+
+    // Close on click outside
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closePopup();
+    });
+}
+
+function updateActiveFiltersCount() {
+    let count = 0;
+    if (filters.search) count++;
+    if (filters.status) count++;
+    if (filters.hookType) count++;
+    if (filters.visualStyle) count++;
+    if (filters.musicVibe) count++;
+    if (filters.thisWeekOnly) count++;
+
+    const badge = document.getElementById('active-filters-count');
+    if (badge) {
+        if (count > 0) {
+            badge.textContent = count;
+            badge.classList.remove('hidden');
+        } else {
+            badge.classList.add('hidden');
+        }
+    }
+}
